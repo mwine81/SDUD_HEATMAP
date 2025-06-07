@@ -1,10 +1,11 @@
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
 
-# Virtual environments
-.venv
+pyproject.toml
+uv.lock
+pyproject.toml
+.gitignore
+pyproject.toml
+sdud_nadac.md
+__pycache__/config.cpython-39.pyc
+.gitignore
+pyproject.toml
+.python-version

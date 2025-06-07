@@ -1,54 +1,72 @@
----
-title: Sdud Nadac
-marimo-version: 0.13.15
----
-
-```python {.marimo}
-import marimo as mo
 import polars as pl
-from polars import col as c
+from polars import col as c 
 import polars.selectors as cs
+from config import sdud_path, product_path, dates_path
+from dash import dcc
 import plotly.express as px
-import plotly.graph_objects as go
-# load data/sdud.parquet in lazy mode
-sdud = pl.scan_parquet('data/sdud.parquet')
-# load data/product_ids.parquet in lazy mode
-product_ids = pl.scan_parquet('data/product_id.parquet')
-# load data/date_id.parquet in lazy mode
-date_id = pl.scan_parquet('data/date_id_filtered.parquet')
-```
 
-```python {.marimo}
+# Lazy load dataframes
+sdud = pl.scan_parquet(sdud_path)
+product = pl.scan_parquet(product_path)
+dates = pl.scan_parquet(dates_path)
 
-def create_selection(data, key_col, value_col, start_value = 0):
-    key = data.select(key_col).collect().to_series().to_list()
-    value = data.select(value_col).collect().to_series().to_list()
-    return mo.ui.dropdown({k:v for k, v in zip(key, value)}, value=key[0], searchable=True)
-    
-date_selection = create_selection(date_id, 'formatted_date', 'date_id',start_value=-1)
-brand_generic = mo.ui.dropdown({"Brand":1, 'Generic':0}, value='Brand')
-brand_selection = create_selection(product_ids.filter(c.is_brand), 'product', 'product_id')
+def product_dropdown():
+    """
+    Create a dropdown component for product selection.
+    """
+    options = product.select(c.product).collect().to_series().to_list()
+    return dcc.Dropdown(
+        id="product-dropdown",
+        options=options,
+        value='metFORMIN HCl ER Oral Tablet Extended Release 24 Hour 500 MG',  # Default to the first product
+        searchable=True,
+        clearable=True,
+        style={"width": "100%"},
+    )
 
-generic_selections = create_selection(product_ids.filter(c.is_brand == False), 'product', 'product_id')
-ffsu_dropdown = mo.ui.dropdown(options={'FFSU':[True],'MCOU':[False],'ALL':[True, False]}, value='ALL')
-metric = mo.ui.dropdown(options={'Markup per Unit': 'markup_per_unit', 'Payment per Unit': 'payment_per_unit'}, value='Markup per Unit')
-```
+def date_dropdown():
+    """
+    Create a dropdown component for date selection.
+    """
+    options = dates.select(c.formatted_date).collect().to_series().to_list()
+    return dcc.Dropdown(
+        id="date-dropdown",
+        options=options,
+        value=options[-1],  # Default to the last date
+        searchable=True,
+        clearable=True,
+        style={"width": "100%"},
+    )
 
-```python {.marimo}
-product_selection =brand_selection if brand_generic.value else generic_selections 
-```
+def ffsu_dropdown():
+    """
+    Create a dropdown component for FFSU selection.
+    """
+    return dcc.Checklist(
+        id="ffsu-checklist",
+        options=[
+            {'label': 'FFSU', 'value': True},
+            {'label': 'Non-FFSU', 'value': False}
+        ],
+        value=[True, False],  # Default to both options selected
+        labelStyle={'display': 'block'},
+    )
 
-```python {.marimo hide_code="true"}
-[
-date_selection,
-brand_generic,
-product_selection,
-ffsu_dropdown,
-metric
-]
-```
+# metric dropdown
+def metric_dropdown():
+    """
+    Create a dropdown component for metric selection.
+    """
+    return dcc.Dropdown(
+        id="metric-dropdown",
+        options=[
+         'markup_per_unit', 'payment_per_unit'
+        ],
+        value='markup_per_unit',  # Default to markup_per_unit
+        searchable=True,
+        style={"width": "100%"},
+    )
 
-```python {.marimo hide_code="true"}
 def markup_per_unit() -> pl.Expr:
     return ((c.total - c.nadac) / c.units).round(2).alias('markup_per_unit')
 
@@ -58,21 +76,19 @@ def payment_per_unit() -> pl.Expr:
 def nadac_per_unit():
     return (c.nadac / c.units).round(2).alias('nadac_per_unit')
 
-data = (
-sdud
-.filter(c.date_id == date_selection.value)
-#  filter by brand or generic based on brand_generic value
-.filter(
-c.product_id == product_selection.value
-)
-.filter(c.is_ffsu.is_in(ffsu_dropdown.value))
-.group_by('state')
-.agg(pl.col(pl.Float64).sum())
-.with_columns(markup_per_unit(),payment_per_unit(), nadac_per_unit())
-)
-```
+def map_df(date_id, product_id, ffsu):
+        return (
+        sdud
+        .filter(c.date_id == date_id)
+        #  filter by brand or generic based on brand_generic value
+        .filter(
+        c.product_id == product_id)
+        .filter(c.is_ffsu.is_in(ffsu))
+        .group_by('state')
+        .agg(pl.col(pl.Float64).sum())
+        .with_columns(markup_per_unit(),payment_per_unit(), nadac_per_unit())
+        )
 
-```python {.marimo hide_code="true"}
 def create_choropleth(data: pl.LazyFrame, metric: str):
     """
     Create a choropleth map using Plotly Express.
@@ -101,7 +117,8 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         color=metric, 
         scope="usa",
         color_continuous_scale="Viridis",
-        title=f"{metric.replace('_', ' ').title()} by State"
+        title=f"{metric.replace('_', ' ').title()} by State",
+        custom_data=['state'],
     )
     
     # Update layout for professional appearance
@@ -146,35 +163,14 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
     
     return fig
 
-chart = mo.ui.plotly(create_choropleth(data, metric.value))
-```
-
-```python {.marimo}
-chart
-```
-
-```python {.marimo}
-data.sort(c.state).collect()
-```
-
-```python {.marimo}
-states = data.select(c.state).unique().sort('state').collect().to_series().to_list()
-
-state_selection = mo.ui.dropdown(states, value=states[0], searchable=True)
-state_selection
-
-
-```
-
-```python {.marimo}
 def state_data(state, product_id):
     return (
-        pl.scan_parquet('data/sdud.parquet')
+        sdud
         .filter(c.product_id == product_id)
         .filter(c.state == state)
         .group_by(c.date_id)
         .agg(pl.col(pl.Float64).sum().round(4))
-        .join(date_id, on='date_id')
+        .join(dates, on='date_id')
         .with_columns(
             pl.date(
                 c.year,
@@ -192,16 +188,6 @@ def state_data(state, product_id):
             payment_per_unit=(c.total / c.units).round(4)
         )
     )
-
-```
-
-```python {.marimo}
-state_df = state_data(state_selection.value, product_selection.value)
-state_df.collect()
-```
-
-```python {.marimo}
-
 
 def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
     """
@@ -266,7 +252,24 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
             tickformat="%b %Y",
             showgrid=True,
             gridcolor="#e5e5e5",
-            tickfont=dict(size=13)
+            tickfont=dict(size=13),
+            rangeslider=dict(
+                visible=True,
+                thickness=0.08,
+                bgcolor="#f5f5f5",
+                bordercolor="#cccccc",
+                borderwidth=1
+            ),
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1, label="1y", step="year", stepmode="backward"),
+                    dict(count=2, label="2y", step="year", stepmode="backward"),
+                    dict(step="all", label="All")
+                ]),
+                bgcolor="#f5f5f5",
+                activecolor="#1f77b4",
+                font=dict(size=12)
+            )
         ),
         yaxis=dict(
             title="Dollars per Unit",
@@ -277,8 +280,8 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         ),
         legend=dict(
             orientation="h",
-            yanchor="bottom",
-            y=1.02,
+            yanchor="top",
+            y=1.05,  # Move legend below the title
             xanchor="center",
             x=0.5,
             font=dict(size=14)
@@ -289,13 +292,5 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         height=550,
         margin=dict(l=60, r=30, t=80, b=60)
     )
-
+    
     return fig
-
-
-mo.ui.plotly(plot_state_timeseries(state_df, state_selection.value))
-```
-
-```python {.marimo}
-
-```

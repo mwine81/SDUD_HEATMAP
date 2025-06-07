@@ -3,5 +3,13 @@ name = "sdud-heatmap"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = []
+requires-python = ">=3.9"
+dependencies = [
+    "dash-core-components>=2.0.0",
+    "dash>=3.0.4",
+    "numpy>=2.0.2",
+    "pandas>=2.3.0",
+    "plotly>=6.1.2",
+    "polars>=1.30.0",
+    "pyarrow>=20.0.0",
+]
