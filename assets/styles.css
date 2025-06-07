@@ -1,0 +1,405 @@
+/* Drug Pricing Dashboard - Professional Styling */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+/* Root Variables */
+:root {
+    --primary-color: #2E86AB;
+    --secondary-color: #A23B72;
+    --accent-color: #F18F01;
+    --background-primary: #f8fafc;
+    --background-secondary: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+    background-color: var(--background-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--background-primary);
+    min-height: 100vh;
+}
+
+/* Header Section */
+.header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, rgba(46, 134, 171, 0.05), rgba(162, 59, 114, 0.05));
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.main-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Controls Section */
+.controls-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background-color: var(--background-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Chart Sections */
+.main-chart-section,
+.state-chart-section {
+    margin-bottom: 2rem;
+}
+
+.chart-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.chart-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem 0;
+    font-weight: 400;
+}
+
+/* Dropdown Styling */
+.Select-control,
+.dropdown .Select-control {
+    border: 2px solid var(--border-color) !important;
+    border-radius: var(--border-radius) !important;
+    background-color: var(--background-secondary) !important;
+    box-shadow: var(--shadow-sm) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+    min-height: 44px !important;
+}
+
+.Select-control:hover,
+.dropdown .Select-control:hover {
+    border-color: var(--primary-color) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.is-focused .Select-control,
+.dropdown .is-focused .Select-control {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.1) !important;
+}
+
+.Select-placeholder,
+.dropdown .Select-placeholder {
+    color: var(--text-muted) !important;
+    font-size: 14px !important;
+}
+
+.Select-value-label,
+.dropdown .Select-value-label {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.Select-arrow-zone,
+.dropdown .Select-arrow-zone {
+    padding-right: 12px !important;
+}
+
+.Select-arrow,
+.dropdown .Select-arrow {
+    border-color: var(--text-secondary) transparent transparent !important;
+}
+
+/* Dropdown Menu */
+.Select-menu-outer,
+.dropdown .Select-menu-outer {
+    border: 2px solid var(--border-color) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: var(--shadow-lg) !important;
+    background-color: var(--background-secondary) !important;
+    z-index: 1000 !important;
+}
+
+.Select-option,
+.dropdown .Select-option {
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    color: var(--text-primary) !important;
+    transition: all 0.15s ease !important;
+}
+
+.Select-option:hover,
+.dropdown .Select-option:hover {
+    background-color: rgba(46, 134, 171, 0.1) !important;
+    color: var(--primary-color) !important;
+}
+
+.is-selected .Select-option,
+.dropdown .is-selected .Select-option {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* Checklist Styling */
+.checklist-container {
+    padding: 1rem;
+    background-color: var(--background-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.checklist-container label {
+    display: flex !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+    margin: 4px 0 !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+}
+
+.checklist-container label:hover {
+    background-color: rgba(46, 134, 171, 0.05) !important;
+}
+
+.checklist-container input[type="checkbox"] {
+    margin-right: 8px !important;
+    width: 16px !important;
+    height: 16px !important;
+    accent-color: var(--primary-color) !important;
+}
+
+/* Graph Container */
+.graph-container {
+    background-color: var(--background-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+/* Graph Styling */
+.js-plotly-plot .plotly .modebar {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 6px !important;
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn {
+    color: var(--text-secondary) !important;
+    transition: all 0.2s ease !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn:hover {
+    color: var(--primary-color) !important;
+    background-color: rgba(46, 134, 171, 0.1) !important;
+}
+
+/* State Chart Container */
+#state-chart {
+    margin-top: 2rem;
+}
+
+/* Loading Spinner */
+.loading-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background-color: var(--background-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hover Instructions */
+.hover-instructions {
+    text-align: center;
+    padding: 3rem 2rem;
+    background-color: var(--background-secondary);
+    border-radius: var(--border-radius);
+    border: 2px dashed var(--border-color);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 2rem;
+    transition: all 0.3s ease;
+}
+
+.hover-instructions:hover {
+    border-color: var(--primary-color);
+    color: var(--text-secondary);
+    background-color: rgba(46, 134, 171, 0.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    ._dash-container {
+        padding: 15px;
+    }
+    
+    .controls-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .graph-container {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    ._dash-container {
+        padding: 10px;
+    }
+    
+    .controls-container {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .controls-container {
+        display: none;
+    }
+    
+    ._dash-container {
+        background-color: white;
+        padding: 0;
+    }
+    
+    .graph-container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #000;
+        --text-secondary: #000;
+        --text-muted: #333;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Indicators for Accessibility */
+*:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
