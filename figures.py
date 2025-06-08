@@ -270,7 +270,7 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         legend=dict(
             orientation="h",
             yanchor="top",
-            y=-0.15,
+            y=-0.40,
             xanchor="center",
             x=0.5,
             font=dict(size=14, color="#2c3e50"),
@@ -282,7 +282,7 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         font=dict(family="Inter, Arial, sans-serif"),
         plot_bgcolor="#ffffff",
         paper_bgcolor="#fafbfc",
-        width=1000,
+        # width=1000,
         height=600,
         margin=dict(l=80, r=40, t=120, b=120),
         hovermode="x unified",
