@@ -3,7 +3,7 @@ Basic Appshell with header and navbar that collapses on mobile.
 """
 
 import dash_mantine_components as dmc
-
+from dash_iconify import DashIconify
 from dash import Dash, Input, Output, State, callback, dcc
 from helper import MantineUI, dates, product, map_df, state_data
 from figures import create_choropleth, plot_state_timeseries
@@ -19,23 +19,66 @@ layout = dmc.AppShell(
             dmc.Group(
                 [
                     dmc.Burger(id="burger", size="sm", hiddenFrom="sm", opened=False),
-                    # dmc.Image(src=logo, h=40),
-                    dmc.Title("Demo App", c="blue"),
+                    html.Img(
+                        src="/assets/logo.png",
+                        style={
+                            "height": "40px",
+                            "marginRight": "12px",
+                            "verticalAlign": "middle",
+                        },
+                    ),
+                    dmc.Title("Drug Pricing Analytics", c="blue", order=3, style={"fontWeight": 700}),
                 ],
                 h="100%",
                 px="md",
-            )
+            ),
+            style={"backgroundColor": "#f8fafc", "borderBottom": "1px solid #e2e8f0"},
         ),
         dmc.AppShellNavbar(
             id="navbar",
             children=[
-                "Navbar",
-                MantineUI.product_dropdown(),
-                MantineUI.date_dropdown(),
-                MantineUI.ffsu_dropdown(),
-                MantineUI.metric_dropdown(),
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.ThemeIcon(
+                                    DashIconify(icon="tabler:database", width=24),
+                                    variant="light",
+                                    color="blue",
+                                    size=36,
+                                ),
+                                dmc.Text("Navigation", fw=700, size="lg", c="blue"),
+                            ],
+                            mb="md",
+                        ),
+                        dmc.Divider(),
+                        dmc.Text("Select Product", size="sm", c="gray"),
+                        MantineUI.product_dropdown(),
+                        dmc.Text("Select Date", size="sm", c="gray", mt="sm"),
+                        MantineUI.date_dropdown(),
+                        dmc.Text("FFSU Filter", size="sm", c="gray", mt="sm"),
+                        MantineUI.ffsu_dropdown(),
+                        dmc.Text("Metric", size="sm", c="gray", mt="sm"),
+                        MantineUI.metric_dropdown(),
+                        dmc.Space(h=16),
+                        dmc.Divider(),
+                        dmc.Text(
+                            "Powered by 46Brooklyn",
+                            size="xs",
+                            c="dimmed",
+                            #align="center",
+                            mt="md",
+                        ),
+                    ],
+                    gap="xs",
+                )
             ],
             p="md",
+            style={
+                "backgroundColor": "#f1f5f9",
+                "borderRight": "1px solid #e2e8f0",
+                "minHeight": "100vh",
+            },
         ),
         dmc.AppShellMain(
             [
