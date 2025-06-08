@@ -211,7 +211,7 @@ def update_heatmap(product_value, date_value, ffsu_value, metric_value):
         ffsu_value = []
     df = map_df(date_id, product_id, ffsu_value)
     fig = create_choropleth(df, metric_value)
-
+    
     return fig
 
 

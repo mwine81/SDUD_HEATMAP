@@ -74,7 +74,7 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
             'bgcolor': 'rgba(248, 249, 250, 0.95)',
             'bordercolor': '#dee2e6',
             'borderwidth': 1,
-            'tickformat': '$,.0f' if is_currency else ',.1f',
+            'tickformat': '$,.2f' if is_currency else ',.1f',
             'tickmode': 'array',
             'tickvals': tickvals,
             'nticks': nticks
