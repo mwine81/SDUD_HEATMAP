@@ -49,8 +49,16 @@ layout = dmc.AppShell(
                             ], justify="space-between", align="flex-start")
                         ], withBorder=True, inheritPadding=True, py="xs"),
                         dmc.CardSection(
-                            id='heatmap-container',
-                            p=0
+                            dcc.Graph(
+            id='heatmap-graph',
+            style={'height': '500px'},
+            
+            config={
+                'displayModeBar': True,
+                'displaylogo': False,
+                'modeBarButtonsToRemove': ['pan2d', 'lasso2d', 'select2d']
+            }
+        )
                         ),
                     ],
                     withBorder=True,
@@ -82,7 +90,7 @@ def navbar_is_open(opened, navbar):
     navbar["collapsed"] = {"mobile": not opened}
     return navbar
 @app.callback(
-    Output('heatmap-container', 'children'),
+    Output('heatmap-graph', 'figure'),
     [Input('product-dropdown', 'value'),
      Input('date-dropdown', 'value'),
      Input('ffsu-checklist', 'value'),
@@ -101,55 +109,9 @@ def update_heatmap(product_value, date_value, ffsu_value, metric_value):
     else:
         ffsu_value = []
     df = map_df(date_id, product_id, ffsu_value)
-
-    if df.collect().is_empty():
-        return dmc.Center(
-            dmc.Card(
-            [
-                dmc.CardSection(
-                    dmc.Group([
-                        #dmc.IconAlertCircleFilled(size=32, color="red", radius="xl", size="lg", variant="light"),
-                        dmc.Text(
-                            "No data available for the selected parameters.",
-                            size="lg",
-                            fw="bold",
-                            c="red"
-                        ),
-                    ], gap="md", align="center"),
-                    withBorder=False,
-                    inheritPadding=True,
-                    py="md"
-                ),
-                dmc.Text(
-                    "Please adjust your filters and try again.",
-                    size="sm",
-                    #c="dimmed",
-                    ta="center",
-                    mt="xs"
-                ),
-            ],
-            withBorder=True,
-            shadow="sm",
-            radius="md",
-            p="lg",
-            style={"maxWidth": 400}
-            ),
-            style={"height": "400px"}
-        )
-
     fig = create_choropleth(df, metric_value)
-    div = dcc.Graph(
-        id='heatmap-graph',
-        style={'height': '500px'},
-        figure=fig,
-        config={
-            'displayModeBar': True,
-            'displaylogo': False,
-            'modeBarButtonsToRemove': ['pan2d', 'lasso2d', 'select2d']
-        }
-    )
-
-    return div
+  
+    return fig
 
 if __name__ == "__main__":
     app.run(debug=True, port=8052)
