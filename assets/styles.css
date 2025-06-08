@@ -238,24 +238,61 @@ body {
     border: 1px solid var(--border-color);
     margin-bottom: 2rem;
     overflow: hidden;
+    padding: 1.5rem;
+}
+
+/* Main Chart Specific Styling */
+.main-chart {
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.main-chart .js-plotly-plot {
+    border-radius: 6px;
+}
+
+/* Detail Chart Styling */
+.detail-chart {
+    border-radius: 6px;
+    overflow: hidden;
 }
 
 /* Graph Styling */
 .js-plotly-plot .plotly .modebar {
-    background-color: rgba(255, 255, 255, 0.9) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
     border-radius: 6px !important;
     box-shadow: var(--shadow-sm) !important;
     border: 1px solid var(--border-color) !important;
+    right: 10px !important;
+    top: 10px !important;
 }
 
 .js-plotly-plot .plotly .modebar-btn {
     color: var(--text-secondary) !important;
     transition: all 0.2s ease !important;
+    border-radius: 4px !important;
 }
 
 .js-plotly-plot .plotly .modebar-btn:hover {
     color: var(--primary-color) !important;
     background-color: rgba(46, 134, 171, 0.1) !important;
+}
+
+/* Choropleth Map Specific Styling */
+.main-chart .plotly-graph-div {
+    border-radius: 6px;
+    background-color: var(--background-secondary);
+}
+
+/* Ensure map fills container properly */
+.main-chart .js-plotly-plot .plot-container {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Style the plotly annotations */
+.js-plotly-plot .annotation {
+    font-family: 'Inter', sans-serif !important;
 }
 
 /* State Chart Container */
@@ -306,6 +343,24 @@ body {
     border-color: var(--primary-color);
     color: var(--text-secondary);
     background-color: rgba(46, 134, 171, 0.02);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
 /* Responsive Design */
@@ -386,20 +441,56 @@ body {
     border-radius: 4px;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
+/* Mantine Card Specific Styling for app2.py */
+#map-card {
+    margin-bottom: 1.5rem;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-::-webkit-scrollbar-track {
-    background: var(--background-primary);
+#map-card .mantine-Card-section {
+    background-color: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 4px;
+/* Choropleth Map in Mantine Card */
+#heatmap-graph {
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
+#heatmap-graph .js-plotly-plot {
+    background-color: transparent !important;
+}
+
+#heatmap-graph .plotly .modebar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    top: 10px !important;
+    right: 10px !important;
+}
+
+#heatmap-graph .plotly .modebar-btn {
+    background: transparent !important;
+    border: none !important;
+    color: #64748b !important;
+    transition: all 0.2s ease !important;
+}
+
+#heatmap-graph .plotly .modebar-btn:hover {
+    background: rgba(46, 134, 171, 0.1) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Responsive adjustments for Mantine layout */
+@media (max-width: 768px) {
+    #map-card {
+        margin: 0 -0.5rem 1rem -0.5rem;
+    }
+    
+    #heatmap-graph {
+        height: 400px !important;
+    }
 }

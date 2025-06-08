@@ -1,6 +1,7 @@
 from dash import Dash, dependencies, Output, Input
 from dash import html, dcc
-from helper import product_dropdown, date_dropdown, ffsu_dropdown, map_df, product,dates, metric_dropdown, create_choropleth, state_data, plot_state_timeseries
+from helper import product_dropdown, date_dropdown, ffsu_dropdown, map_df, product,dates, metric_dropdown, state_data
+from figures import create_choropleth, plot_state_timeseries
 from polars import col as c
 import json
 
