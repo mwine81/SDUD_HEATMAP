@@ -1,6 +1,7 @@
 import polars as pl
 import plotly.express as px
 from polars import col as c
+from dash import html
 
 def create_choropleth(data: pl.LazyFrame, metric: str):
     """
@@ -326,3 +327,37 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
     )
     
     return fig
+
+def state_place_holder():
+    return html.Div(
+            [
+                html.Div(
+                    [
+                        html.I(
+                            className="fas fa-chart-line",
+                            style={
+                                "fontSize": "3rem",
+                                "color": "#64748b",
+                                "marginBottom": "1rem",
+                            },
+                        ),
+                        html.H4(
+                            "Select a State to View Time Series",
+                            style={"color": "#64748b", "marginBottom": "0.5rem"},
+                        ),
+                        html.P(
+                            "Click on any state in the map above to see pricing trends over time",
+                            style={"color": "#94a3b8", "fontSize": "1.1rem"},
+                        ),
+                    ],
+                    style={
+                        "textAlign": "center",
+                        "padding": "3rem 2rem",
+                        "backgroundColor": "#ffffff",
+                        "borderRadius": "8px",
+                        "border": "2px dashed #e2e8f0",
+                        "margin": "2rem 0",
+                    },
+                )
+            ]
+        )

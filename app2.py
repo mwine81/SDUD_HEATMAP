@@ -5,8 +5,8 @@ Basic Appshell with header and navbar that collapses on mobile.
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from dash import Dash, Input, Output, State, callback, dcc
-from helper import MantineUI, dates, product, map_df, state_data
-from figures import create_choropleth, plot_state_timeseries
+from helper import MantineUI, dates, product, map_df, state_data, check_ffsu_value
+from figures import create_choropleth, plot_state_timeseries, state_place_holder
 from polars import col as c
 from dash import html
 
@@ -201,65 +201,35 @@ def update_heatmap(product_value, date_value, ffsu_value, metric_value):
         dates.filter(c.formatted_date == date_value).select(c.date_id).collect().item()
     )
 
-    if len(ffsu_value) == 2:
-        ffsu_value = [True, False]
-    elif ffsu_value == ["FFSU"]:
-        ffsu_value = [True]
-    elif ffsu_value == ["Non-FFSU"]:
-        ffsu_value = [False]
-    else:
-        ffsu_value = []
+    ffsu_value = check_ffsu_value(ffsu_value)
     df = map_df(date_id, product_id, ffsu_value)
     fig = create_choropleth(df, metric_value)
     
     return fig
 
 
+
+
 @app.callback(
     Output("state-chart", "children"),
     Input("heatmap-graph", "clickData"),
     Input("product-dropdown", "value"),
+    Input("ffsu-checklist", "value"),
 )
-def display_hover_data(clickData, product_value):
+def display_hover_data(clickData, product_value, ffsu_value):
     if clickData is None:
-        return html.Div(
-            [
-                html.Div(
-                    [
-                        html.I(
-                            className="fas fa-chart-line",
-                            style={
-                                "fontSize": "3rem",
-                                "color": "#64748b",
-                                "marginBottom": "1rem",
-                            },
-                        ),
-                        html.H4(
-                            "Select a State to View Time Series",
-                            style={"color": "#64748b", "marginBottom": "0.5rem"},
-                        ),
-                        html.P(
-                            "Click on any state in the map above to see pricing trends over time",
-                            style={"color": "#94a3b8", "fontSize": "1.1rem"},
-                        ),
-                    ],
-                    style={
-                        "textAlign": "center",
-                        "padding": "3rem 2rem",
-                        "backgroundColor": "#ffffff",
-                        "borderRadius": "8px",
-                        "border": "2px dashed #e2e8f0",
-                        "margin": "2rem 0",
-                    },
-                )
-            ]
-        )
+        return state_place_holder()
 
     product_id = (
         product.filter(c.product == product_value).select(c.product_id).collect().item()
     )
     state = clickData["points"][0]["customdata"][0]
-    data = state_data(state, product_id)
+    ffsu_value = check_ffsu_value(ffsu_value)
+    data = state_data(state, product_id, ffsu_value)
+    data.collect().glimpse()
+
+    if data.collect().is_empty():
+        return state_place_holder()
 
     return html.Div(
         [

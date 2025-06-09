@@ -78,6 +78,16 @@ def payment_per_unit() -> pl.Expr:
 def nadac_per_unit():
     return (c.nadac / c.units).round(2).alias('nadac_per_unit')
 
+def check_ffsu_value(value):
+    if len(value) == 2:
+        return [True, False]
+    elif value == ["FFSU"]:
+        return [True]
+    elif value == ["Non-FFSU"]:
+        return [False]
+    else:
+        return []
+
 def map_df(date_id, product_id, ffsu):
         return (
         sdud
@@ -91,11 +101,12 @@ def map_df(date_id, product_id, ffsu):
         .with_columns(markup_per_unit(),payment_per_unit(), nadac_per_unit())
         )
 
-def state_data(state, product_id):
+def state_data(state, product_id, ffsu):
     return (
         sdud
         .filter(c.product_id == product_id)
         .filter(c.state == state)
+        .filter(c.is_ffsu.is_in(ffsu))
         .group_by(c.date_id)
         .agg(pl.col(pl.Float64).sum().round(4))
         .join(dates, on='date_id')
