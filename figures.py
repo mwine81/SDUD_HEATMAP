@@ -38,8 +38,8 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
     )
     
     # Calculate min/max for colorbar ticks
-    min_val = float(df[metric].min())
-    max_val = float(df[metric].max())
+    min_val = float(df[metric].min()) 
+    max_val = float(df[metric].max()) 
     nticks = 4  # Limit to 4 ticks to avoid overlap
     if min_val == max_val:
         tickvals = [min_val]
@@ -361,3 +361,42 @@ def state_place_holder():
                 )
             ]
         )
+
+
+def empty_map_placeholder():
+    import plotly.graph_objects as go
+
+    fig = go.Figure()
+    fig.add_annotation(
+        text="<b>No Data Available</b><br><span style='font-size:1.1em;color:#64748b;'>No data found for the selected filters.<br>Please adjust your selections and try again.</span>",
+        xref="paper", yref="paper",
+        x=0.5, y=0.5,
+        xanchor="center", yanchor="middle",
+        showarrow=False,
+        font=dict(size=20, color="#64748b", family="Inter, Arial, sans-serif"),
+        bgcolor="rgba(255,255,255,0.95)",
+        bordercolor="#e2e8f0",
+        borderwidth=2,
+        borderpad=12
+    )
+
+    fig.update_layout(
+        geo=dict(
+            scope="usa",
+            showland=True,
+            landcolor="#f8fafc",
+            showframe=False,
+            showcoastlines=False,
+            bgcolor="rgba(0,0,0,0)"
+        ),
+        plot_bgcolor="#ffffff",
+        paper_bgcolor="#fafbfc",
+        margin=dict(l=0, r=0, t=0, b=0),
+        xaxis=dict(visible=False),
+        yaxis=dict(visible=False)
+    )
+
+    fig.update_xaxes(showgrid=False, zeroline=False)
+    fig.update_yaxes(showgrid=False, zeroline=False)
+
+    return fig

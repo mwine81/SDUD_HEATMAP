@@ -79,14 +79,12 @@ def nadac_per_unit():
     return (c.nadac / c.units).round(2).alias('nadac_per_unit')
 
 def check_ffsu_value(value):
-    if len(value) == 2:
+    if value == 'ALL':
         return [True, False]
-    elif value == ["FFSU"]:
+    elif value == "FFSU":
         return [True]
-    elif value == ["Non-FFSU"]:
+    elif value == "Non-FFSU":
         return [False]
-    else:
-        return []
 
 def map_df(date_id, product_id, ffsu):
         return (
@@ -164,11 +162,11 @@ class MantineUI:
         """
         Create a Mantine checklist component for FFSU selection.
         """
-        return dmc.MultiSelect(
+        return dmc.Select(
             id="ffsu-checklist",
-            data= ['FFSU', 'Non-FFSU'],
+            data= ['FFSU', 'Non-FFSU','ALL'],
               # Default to both options selected
-            value=['FFSU', 'Non-FFSU'],
+            value='ALL',
         )
     @staticmethod
     def metric_dropdown():
