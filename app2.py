@@ -236,7 +236,7 @@ def display_hover_data(clickData, product_value, ffsu_value, date_value):
     
     if data.collect().is_empty():
         return state_place_holder()
-    data.collect().glimpse()
+
     summary_data = (
     data
     .filter(c.formatted_date == date_value)
@@ -365,7 +365,7 @@ def display_hover_data(clickData, product_value, ffsu_value, date_value):
                                         dmc.Stack(
                                             [
                                                 dmc.Text("Markup/Unit", size="xs", c="gray", ta="center"),
-                                                dmc.Text(f"${markup_per_unit:.2f}", size="xl", fw="bold", c="teal", ta="center"),
+                                                dmc.Text(f"${markup_per_unit:.2f}", size="xl", fw="bold", c="teal" if markup_per_unit > 0 else "red", ta="center"),
                                             ],
                                             gap="xs",
                                         )
@@ -374,7 +374,7 @@ def display_hover_data(clickData, product_value, ffsu_value, date_value):
                                     shadow="xs",
                                     radius="md",
                                     p="md",
-                                    style={"background": "#e6fffa", "height": "80px", "display": "flex", "alignItems": "center"},
+                                    style={"background": "#e6fffa" if markup_per_unit > 0 else "#F8E8E9", "height": "80px", "display": "flex", "alignItems": "center"},
                                 ),
                                 span='auto',
                             ),
