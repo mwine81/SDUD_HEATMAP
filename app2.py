@@ -29,32 +29,36 @@ layout = dmc.AppShell(
                     dmc.Group(
                         [
                             dmc.ThemeIcon(
-                                DashIconify(icon="tabler:pill", width=28),
+                                DashIconify(icon="tabler:chart-line", width=32),
                                 size="xl",
                                 variant="light",
-                                color="blue",
+                                color="orange",
                                 radius="md",
+                                style={"backgroundColor": "white"},
                             ),
                             dmc.Stack(
                                 [
                                     dmc.Title(
-                                        "Drug Pricing Analytics",
-                                        c="blue",
+                                        "46brooklyn Research",
                                         order=3,
+                                        className="brooklyn-title",
                                         style={
-                                            "fontWeight": 800,
-                                            "letterSpacing": "0.02em",
-                                            "fontFamily": "Inter, sans-serif",
-                                            "fontSize": "1.7rem",
+                                            "fontSize": "1.75rem",
                                             "marginBottom": "0",
                                             "lineHeight": 1.2,
+                                            "color": "white",
+                                            "fontFamily": "Source Sans Pro, sans-serif",
+                                            "fontWeight": 700,
                                         },
                                     ),
                                     dmc.Text(
-                                        "SDUD NADAC Analysis Dashboard",
-                                        size="xs",
-                                        c="gray",
-                                        style={"marginTop": "-4px", "fontWeight": 500},
+                                        "Drug Pricing Analytics Dashboard",
+                                        size="sm",
+                                        className="brooklyn-subtitle",
+                                        style={
+                                            "marginTop": "-2px",
+                                            "color": "rgba(255, 255, 255, 0.8)",
+                                        },
                                     ),
                                 ],
                                 gap="xs",
@@ -63,39 +67,46 @@ layout = dmc.AppShell(
                         gap="md",
                         align="center",
                     ),
+                    dmc.Group(
+                        [
+                            dmc.Badge("NADAC Data", color="orange", variant="light", size="md"),
+                            dmc.Badge("Live Dashboard", color="gray", variant="outline", size="md", style={"color": "white", "borderColor": "white"}),
+                        ],
+                        gap="sm",
+                    ),
                 ],
                 h="100%",
                 px="xl",
                 align="center",
                 justify="space-between",
+                wrap="nowrap",
             ),
+            className="brooklyn-header",
             style={
-                "background": "linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%)",
-                "borderBottom": "2px solid #e2e8f0",
-                "boxShadow": "0 4px 12px rgba(30, 64, 175, 0.06)",
-                "height": "60px",
+                "height": "70px",
+                "background": "linear-gradient(135deg, #1a365d 0%, #2c5282 100%)",
+                "borderBottom": "3px solid #ed8936",
             },
         ),
-        # ...existing navbar content...
         dmc.AppShellNavbar(
             id="navbar",
             children=[
                 dmc.Stack(
                     [
-                        # Header Section
+                        # 46Brooklyn Style Header Section
                         dmc.Paper(
                             [
                                 dmc.Group(
                                     [
                                         dmc.ThemeIcon(
-                                            DashIconify(icon="tabler:dashboard", width=20),
+                                            DashIconify(icon="tabler:adjustments-horizontal", width=20),
                                             variant="light",
-                                            color="blue",
+                                            color="orange",
                                             size="lg",
                                         ),
                                         dmc.Stack(
                                             [
-                                                dmc.Text("Control Panel", fw="bold", size="md", c="blue"),
+                                                dmc.Text("Dashboard Controls", fw="bold", size="md", className="brooklyn-brand"),
                                                 dmc.Text("Configure analysis parameters", size="xs", c="gray"),
                                             ],
                                             gap="xs"
@@ -107,103 +118,103 @@ layout = dmc.AppShell(
                             p="sm",
                             radius="md",
                             withBorder=True,
-                            style={"backgroundColor": "#f8fafc"},
+                            className="brooklyn-viz-container",
                         ),
                         
-                        # Product Selection Section
+                        # Product Selection Section - 46Brooklyn Style
                         dmc.Stack(
                             [
                                 dmc.Group(
                                     [
-                                        DashIconify(icon="tabler:pill", width=16, color="#3b82f6"),
-                                        dmc.Text("Product Selection", size="sm", fw="bold", c="dark"),
+                                        DashIconify(icon="tabler:pill", width=16, color="#1a365d"),
+                                        dmc.Text("Product Selection", size="sm", fw="bold", className="brooklyn-brand"),
                                     ],
                                     gap="xs",
                                 ),
                                 MantineUI.product_dropdown(),
-                                dmc.Text("Choose the pharmaceutical product to analyze", size="xs", c="gray"),
+                                dmc.Text("Choose pharmaceutical product for analysis", size="xs", c="gray"),
                             ],
                             gap="xs",
                         ),
                         
-                        dmc.Divider(variant="dashed"),
+                        dmc.Divider(color="gray", variant="dashed"),
                         
                         # Date Selection Section
                         dmc.Stack(
                             [
                                 dmc.Group(
                                     [
-                                        DashIconify(icon="tabler:calendar", width=16, color="#3b82f6"),
-                                        dmc.Text("Date Selection", size="sm", fw="bold", c="dark"),
+                                        DashIconify(icon="tabler:calendar-stats", width=16, color="#1a365d"),
+                                        dmc.Text("Time Period", size="sm", fw="bold", className="brooklyn-brand"),
                                     ],
                                     gap="xs",
                                 ),
                                 MantineUI.date_dropdown(),
-                                dmc.Text("Select the time period for analysis", size="xs", c="gray"),
+                                dmc.Text("Select reporting quarter", size="xs", c="gray"),
                             ],
                             gap="xs",
                         ),
                         
-                        dmc.Divider(variant="dashed"),
+                        dmc.Divider(color="gray", variant="dashed"),
                         
                         # Facility Type Section
                         dmc.Stack(
                             [
                                 dmc.Group(
                                     [
-                                        DashIconify(icon="tabler:building-hospital", width=16, color="#3b82f6"),
-                                        dmc.Text("Facility Type", size="sm", fw="bold", c="dark"),
+                                        DashIconify(icon="tabler:building-hospital", width=16, color="#1a365d"),
+                                        dmc.Text("Facility Status", size="sm", fw="bold", className="brooklyn-brand"),
                                     ],
                                     gap="xs",
                                 ),
                                 MantineUI.ffsu_dropdown(),
-                                dmc.Text("Filter by Federal facility status", size="xs", c="gray"),
+                                dmc.Text("Federal vs Non-Federal facilities", size="xs", c="gray"),
                             ],
                             gap="xs",
                         ),
                         
-                        dmc.Divider(variant="dashed"),
+                        dmc.Divider(color="gray", variant="dashed"),
                         
                         # Metric Selection Section
                         dmc.Stack(
                             [
                                 dmc.Group(
                                     [
-                                        DashIconify(icon="tabler:chart-line", width=16, color="#3b82f6"),
-                                        dmc.Text("Metric Selection", size="sm", fw="bold", c="dark"),
+                                        DashIconify(icon="tabler:chart-bar", width=16, color="#1a365d"),
+                                        dmc.Text("Pricing Metric", size="sm", fw="bold", className="brooklyn-brand"),
                                     ],
                                     gap="xs",
                                 ),
                                 MantineUI.metric_dropdown(),
-                                dmc.Text("Choose the pricing metric to visualize", size="xs", c="gray"),
+                                dmc.Text("Choose visualization metric", size="xs", c="gray"),
                             ],
                             gap="xs",
                         ),
                         
                         dmc.Space(h="md"),
                         
-                        # Quick Tips Section
+                        # 46Brooklyn Research Info Section
                         dmc.Paper(
                             [
                                 dmc.Stack(
                                     [
                                         dmc.Group(
                                             [
-                                                DashIconify(icon="tabler:lightbulb", width=16, color="#f59e0b"),
-                                                dmc.Text("Quick Tips", size="sm", fw="bold", c="orange"),
+                                                DashIconify(icon="tabler:info-circle", width=16, color="#ed8936"),
+                                                dmc.Text("About This Dashboard", size="sm", fw="bold", className="brooklyn-accent"),
                                             ],
                                             gap="xs",
                                         ),
                                         dmc.List(
                                             [
                                                 dmc.ListItem(
-                                                    dmc.Text("Click states for time series", size="xs", c="dark")
+                                                    dmc.Text("NADAC pricing data from CMS", size="xs", c="dark")
                                                 ),
                                                 dmc.ListItem(
-                                                    dmc.Text("Use zoom controls on charts", size="xs", c="dark")
+                                                    dmc.Text("State utilization comparisons", size="xs", c="dark")
                                                 ),
                                                 dmc.ListItem(
-                                                    dmc.Text("Hover for detailed data", size="xs", c="dark")
+                                                    dmc.Text("Interactive time series analysis", size="xs", c="dark")
                                                 ),
                                             ],
                                             size="xs",
@@ -215,25 +226,38 @@ layout = dmc.AppShell(
                             ],
                             p="sm",
                             radius="md",
-                            style={"backgroundColor": "#fef3c7", "border": "1px solid #f59e0b"},
+                            style={"backgroundColor": "#fef5e7", "border": "1px solid #ed8936"},
                         ),
                         
-                        dmc.Space(h="xl"),
+                        dmc.Space(h="lg"),
                         
-                        # Footer
-                        dmc.Text(
-                            "Powered by 46Brooklyn",
-                            size="xs",
-                            c="gray",
-                            ta="center",
+                        # 46Brooklyn Footer
+                        dmc.Stack(
+                            [
+                                dmc.Text(
+                                    "46brooklyn Research",
+                                    size="sm",
+                                    fw="bold",
+                                    ta="center",
+                                    className="brooklyn-brand",
+                                ),
+                                dmc.Text(
+                                    "Ohio 501(c)(3) Public Charity",
+                                    size="xs",
+                                    c="gray",
+                                    ta="center",
+                                ),
+                            ],
+                            gap="xs",
                         ),
                     ],
                     gap="md",
                 )
             ],
             p="md",
+            className="brooklyn-navbar",
             style={
-                "backgroundColor": "#f8fafc",
+                "backgroundColor": "#f7fafc",
                 "borderRight": "1px solid #e2e8f0",
                 "minHeight": "100vh",
                 "overflowY": "auto",
@@ -246,34 +270,64 @@ layout = dmc.AppShell(
                     children=[
                         dmc.Container(
                             [
-                                # Page Header
-                                dmc.Group(
+                                # 46Brooklyn Style Page Header
+                                dmc.Stack(
                                     [
-                                        dmc.Stack(
-                                            [
-                                                dmc.Title("Drug Pricing Analytics", order=2, c="blue", fw="bold"),
-                                                dmc.Text(
-                                                    "Comprehensive analysis of NADAC vs payment pricing across states and time",
-                                                    size="md",
-                                                    c="gray",
-                                                ),
-                                            ],
-                                            gap="xs",
-                                        ),
                                         dmc.Group(
                                             [
-                                                dmc.Badge("Live Data", color="green", variant="light"),
-                                                dmc.Badge("SDUD Source", color="blue", variant="light"),
+                                                dmc.Stack(
+                                                    [
+                                                        dmc.Title("NADAC Drug Pricing Dashboard", order=2, className="brooklyn-brand", fw="bold"),
+                                                        dmc.Text(
+                                                            "Explore state-by-state Medicaid drug pricing using CMS NADAC data",
+                                                            size="md",
+                                                            c="gray",
+                                                            style={"maxWidth": "600px"},
+                                                        ),
+                                                    ],
+                                                    gap="xs",
+                                                ),
+                                                dmc.Group(
+                                                    [
+                                                        dmc.Badge("46brooklyn Research", color="orange", variant="filled", size="lg"),
+                                                        dmc.Badge("CMS NADAC", variant="outline", size="md", style={"borderColor": "#1a365d", "color": "#1a365d"}),
+                                                    ],
+                                                    gap="sm",
+                                                ),
                                             ],
-                                            gap="xs",
+                                            justify="space-between",
+                                            align="flex-start",
+                                            mb="xl",
+                                        ),
+                                        
+                                        # 46Brooklyn Style Instructions
+                                        dmc.Paper(
+                                            [
+                                                dmc.Group(
+                                                    [
+                                                        DashIconify(icon="tabler:info-circle", width=20, color="#ed8936"),
+                                                        dmc.Text("How to Use This Dashboard", fw="bold", className="brooklyn-accent"),
+                                                    ],
+                                                    gap="xs",
+                                                    mb="sm",
+                                                ),
+                                                dmc.Text(
+                                                    "Select filters from the left panel, then click on any state in the map below to view detailed pricing trends over time. Compare NADAC reference prices with actual Medicaid payments.",
+                                                    size="sm",
+                                                    c="dark",
+                                                ),
+                                            ],
+                                            p="md",
+                                            radius="md",
+                                            withBorder=True,
+                                            style={"backgroundColor": "#fef5e7", "borderColor": "#ed8936"},
+                                            mb="lg",
                                         ),
                                     ],
-                                    justify="space-between",
-                                    align="flex-start",
-                                    mb="lg",
+                                    gap="md",
                                 ),
                                 
-                                # Main Choropleth Card
+                                # Main Choropleth Card - 46Brooklyn Style
                                 dmc.Card(
                                     children=[
                                         dmc.CardSection(
@@ -282,31 +336,32 @@ layout = dmc.AppShell(
                                                     [
                                                         dmc.Group(
                                                             [
-                                                                DashIconify(icon="tabler:map", width=20, color="#3b82f6"),
+                                                                DashIconify(icon="tabler:map-2", width=24, color="white"),
                                                                 dmc.Text(
-                                                                    "State-by-State Analysis",
+                                                                    "State-by-State Drug Pricing Analysis",
                                                                     size="lg",
                                                                     fw="bold",
+                                                                    style={"color": "white"},
                                                                 ),
                                                             ],
-                                                            gap="xs",
+                                                            gap="sm",
                                                         ),
                                                         dmc.Group(
                                                             [
                                                                 dmc.Tooltip(
                                                                     dmc.ActionIcon(
-                                                                        DashIconify(icon="tabler:info-circle", width=16),
+                                                                        DashIconify(icon="tabler:help", width=16),
                                                                         variant="subtle",
-                                                                        color="gray",
                                                                         size="sm",
+                                                                        style={"color": "white"},
                                                                     ),
-                                                                    label="Click on any state to view detailed time series analysis",
+                                                                    label="Click any state to view detailed time series analysis",
                                                                     position="left",
                                                                 ),
                                                                 dmc.Text(
-                                                                    "Click on a state to view detailed trends",
+                                                                    "Interactive Map",
                                                                     size="sm",
-                                                                    c="gray",
+                                                                    style={"color": "rgba(255, 255, 255, 0.8)"},
                                                                 ),
                                                             ],
                                                             gap="xs",
@@ -316,15 +371,15 @@ layout = dmc.AppShell(
                                                     align="center",
                                                 )
                                             ],
+                                            className="brooklyn-card-header",
                                             withBorder=True,
                                             inheritPadding=True,
-                                            py="sm",
-                                            style={"backgroundColor": "#f8fafc"},
+                                            py="md",
                                         ),
                                         dmc.CardSection(
                                             dcc.Graph(
                                                 id="heatmap-graph",
-                                                style={"height": "500px"},
+                                                style={"height": "520px"},
                                                 config={
                                                     "displayModeBar": True,
                                                     "displaylogo": False,
@@ -335,8 +390,8 @@ layout = dmc.AppShell(
                                                     ],
                                                     "toImageButtonOptions": {
                                                         "format": "png",
-                                                        "filename": "drug_pricing_choropleth",
-                                                        "height": 500,
+                                                        "filename": "46brooklyn_drug_pricing_analysis",
+                                                        "height": 520,
                                                         "width": 1000,
                                                         "scale": 2,
                                                     },
@@ -348,7 +403,7 @@ layout = dmc.AppShell(
                                     shadow="md",
                                     radius="md",
                                     id="map-card",
-                                    style={"marginBottom": "1.5rem"},
+                                    style={"marginBottom": "2rem"},
                                 ),
                                 
                                 # State Details Section
@@ -370,10 +425,10 @@ layout = dmc.AppShell(
             ]
         ),
     ],
-    header={"height": 60},
+    header={"height": 70},
     padding="md",
     navbar={
-        "width": 300,
+        "width": 320,
         "breakpoint": "sm",
         "collapsed": {"mobile": True},
     },
@@ -540,7 +595,7 @@ def display_state_timeseries(clickData, product_value, ffsu_value, date_value):
 
 
 def create_state_placeholder():
-    """Create a professional placeholder for state selection."""
+    """Create a 46Brooklyn-themed placeholder for state selection."""
     return dmc.Card([
         dmc.CardSection([
             dmc.Stack([
@@ -550,39 +605,40 @@ def create_state_placeholder():
                         size=60,
                         radius="xl",
                         variant="light",
-                        color="blue",
+                        color="orange",
                     ),
                     dmc.Stack([
                         dmc.Text(
-                            "Select a State to View Time Series",
+                            "Select a State for Detailed Analysis",
                             size="xl",
                             fw="bold",
-                            c="blue"
+                            className="brooklyn-brand"
                         ),
                         dmc.Text(
-                            "Click on any state in the map above to see pricing trends over time",
+                            "Click on any state in the map above to explore NADAC vs payment pricing trends",
                             size="md",
                             c="gray"
                         )
                     ], gap="xs")
                 ], gap="lg", align="center"),
                 
-                dmc.Divider(color="blue"),
+                dmc.Divider(color="orange"),
                 
                 dmc.Stack([
-                    dmc.Text("📊 What you'll see:", size="sm", fw="bold", c="dark"),
+                    dmc.Text("📊 46brooklyn Analysis Features:", size="sm", fw="bold", className="brooklyn-accent"),
                     dmc.List([
                         dmc.ListItem([
-                            dmc.Text("Historical pricing trends for ", span=True, size="sm", c="gray"),
-                            dmc.Text("NADAC vs Payment per Unit", span=True, size="sm", fw="bold", c="blue"),
+                            dmc.Text("Historical pricing trends comparing ", span=True, size="sm", c="gray"),
+                            dmc.Text("NADAC reference prices", span=True, size="sm", fw="bold", className="brooklyn-brand"),
+                            dmc.Text(" with actual payments", span=True, size="sm", c="gray"),
                         ]),
                         dmc.ListItem([
                             dmc.Text("Interactive time series with ", span=True, size="sm", c="gray"),
-                            dmc.Text("zoom controls", span=True, size="sm", fw="bold", c="blue"),
+                            dmc.Text("quarterly data points", span=True, size="sm", fw="bold", className="brooklyn-brand"),
                         ]),
                         dmc.ListItem([
-                            dmc.Text("Professional data visualization with ", span=True, size="sm", c="gray"),
-                            dmc.Text("detailed tooltips", span=True, size="sm", fw="bold", c="blue"),
+                            dmc.Text("Medicaid spending insights from ", span=True, size="sm", c="gray"),
+                            dmc.Text("CMS utilization data", span=True, size="sm", fw="bold", className="brooklyn-brand"),
                         ]),
                     ], size="sm", c="gray", withPadding=True)
                 ], gap="xs")
@@ -592,10 +648,10 @@ def create_state_placeholder():
     ],
     withBorder=True,
     shadow="md",
-    radius="lg",
+    radius="md",
     style={
-        "backgroundColor": "#f8fafc",
-        "border": "2px dashed #cbd5e1"
+        "backgroundColor": "#fef5e7",
+        "border": "2px dashed #ed8936"
     }
     )
 
@@ -671,10 +727,10 @@ def create_no_data_card(state, date_value=None):
 
 def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spend,
                           payment_per_unit, nadac_per_unit, markup_per_unit, product_value):
-    """Create a comprehensive time series analysis card."""
+    """Create a comprehensive 46Brooklyn-styled time series analysis card."""
     return dmc.Card(
         [
-            # Header Section
+            # 46Brooklyn Header Section
             dmc.CardSection(
                 [
                     dmc.Group(
@@ -683,47 +739,47 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                 dmc.Badge(
                                     state,
                                     size="lg",
-                                    variant="light",
-                                    color="blue",
+                                    variant="filled",
+                                    color="orange",
                                     radius="md"
                                 ),
                                 dmc.Text(
-                                    "Time Series Analysis",
+                                    "46brooklyn Drug Pricing Analysis",
                                     size="lg",
                                     fw="bold",
-                                    c="blue"
+                                    style={"color": "white"}
                                 ),
                             ], gap="sm"),
                             dmc.ActionIcon(
-                                DashIconify(icon="tabler:chart-line", width=20),
-                                variant="light",
-                                color="blue",
+                                DashIconify(icon="tabler:chart-dots", width=20),
+                                variant="subtle",
                                 size="lg",
-                                radius="md"
+                                radius="md",
+                                style={"color": "white"}
                             )
                         ],
                         justify="space-between",
                         align="center",
                     ),
                     dmc.Text(
-                        f"Historical pricing trends for {product_value} in {state}",
+                        f"NADAC vs Payment Analysis: {product_value} in {state}",
                         size="sm",
-                        c="gray",
-                        style={"lineHeight": 1.4}
+                        style={"color": "rgba(255, 255, 255, 0.8)", "lineHeight": 1.4}
                     )
                 ],
+                className="brooklyn-card-header",
                 withBorder=True,
                 inheritPadding=True,
-                py="sm",
+                py="md",
             ),
             
-            # Summary Metrics Section
+            # 46Brooklyn Summary Metrics Section
             dmc.CardSection(
                 [
                     dmc.Group([
-                        DashIconify(icon="tabler:calendar", width=16, color="#3b82f6"),
-                        dmc.Text(f"Summary for {date_value}", size="md", fw="bold", c="blue"),
-                    ], gap="xs", mb="sm"),
+                        DashIconify(icon="tabler:calendar-stats", width=16, color="#ed8936"),
+                        dmc.Text(f"Quarterly Summary: {date_value}", size="md", fw="bold", className="brooklyn-accent"),
+                    ], gap="xs", mb="md"),
                     
                     dmc.Grid(
                         [
@@ -733,7 +789,7 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                         dmc.Stack(
                                             [
                                                 dmc.Text("Total Claims", size="xs", c="gray", ta="center"),
-                                                dmc.Text(f"{total_claims:,.0f}", size="xl", fw="bold", c="blue", ta="center"),
+                                                dmc.Text(f"{total_claims:,.0f}", size="xl", fw="bold", className="brooklyn-brand", ta="center"),
                                             ],
                                             gap="xs",
                                             justify="center",
@@ -741,11 +797,8 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                             h="100%",
                                         )
                                     ],
-                                    withBorder=True,
-                                    shadow="xs",
-                                    radius="md",
-                                    p="md",
-                                    style={"background": "#f0f9ff", "height": "80px"},
+                                    className="brooklyn-metric-card",
+                                    style={"height": "90px"},
                                 ),
                                 span="auto",
                             ),
@@ -754,8 +807,8 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                     [
                                         dmc.Stack(
                                             [
-                                                dmc.Text("Pre-Rebate Spend", size="xs", c="gray", ta="center"),
-                                                dmc.Text(f"${pre_rebate_spend:,.0f}", size="xl", fw="bold", c="blue", ta="center"),
+                                                dmc.Text("Total Spend", size="xs", c="gray", ta="center"),
+                                                dmc.Text(f"${pre_rebate_spend:,.0f}", size="xl", fw="bold", className="brooklyn-brand", ta="center"),
                                             ],
                                             gap="xs",
                                             justify="center",
@@ -763,11 +816,8 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                             h="100%",
                                         )
                                     ],
-                                    withBorder=True,
-                                    shadow="xs",
-                                    radius="md",
-                                    p="md",
-                                    style={"background": "#f0f9ff", "height": "80px"},
+                                    className="brooklyn-metric-card",
+                                    style={"height": "90px"},
                                 ),
                                 span="auto",
                             ),
@@ -777,7 +827,7 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                         dmc.Stack(
                                             [
                                                 dmc.Text("Payment/Unit", size="xs", c="gray", ta="center"),
-                                                dmc.Text(f"${payment_per_unit:.2f}", size="xl", fw="bold", c="blue", ta="center"),
+                                                dmc.Text(f"${payment_per_unit:.2f}", size="xl", fw="bold", className="brooklyn-brand", ta="center"),
                                             ],
                                             gap="xs",
                                             justify="center",
@@ -785,11 +835,8 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                             h="100%",
                                         )
                                     ],
-                                    withBorder=True,
-                                    shadow="xs",
-                                    radius="md",
-                                    p="md",
-                                    style={"background": "#f0f9ff", "height": "80px"},
+                                    className="brooklyn-metric-card",
+                                    style={"height": "90px"},
                                 ),
                                 span="auto",
                             ),
@@ -799,7 +846,7 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                         dmc.Stack(
                                             [
                                                 dmc.Text("NADAC/Unit", size="xs", c="gray", ta="center"),
-                                                dmc.Text(f"${nadac_per_unit:.2f}", size="xl", fw="bold", c="blue", ta="center"),
+                                                dmc.Text(f"${nadac_per_unit:.2f}", size="xl", fw="bold", className="brooklyn-brand", ta="center"),
                                             ],
                                             gap="xs",
                                             justify="center",
@@ -807,11 +854,8 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                             h="100%",
                                         )
                                     ],
-                                    withBorder=True,
-                                    shadow="xs",
-                                    radius="md",
-                                    p="md",
-                                    style={"background": "#f0f9ff", "height": "80px"},
+                                    className="brooklyn-metric-card",
+                                    style={"height": "90px"},
                                 ),
                                 span="auto",
                             ),
@@ -820,7 +864,7 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                     [
                                         dmc.Stack(
                                             [
-                                                dmc.Text("Markup/Unit", size="xs", c="gray", ta="center"),
+                                                dmc.Text("Pricing Differential", size="xs", c="gray", ta="center"),
                                                 dmc.Text(
                                                     f"${markup_per_unit:.2f}", 
                                                     size="xl", 
@@ -835,11 +879,15 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                                             h="100%",
                                         )
                                     ],
-                                    withBorder=True,
-                                    shadow="xs",
-                                    radius="md",
-                                    p="md",
-                                    style={"background": "#ecfdf5" if markup_per_unit > 0 else "#fef2f2", "height": "80px"},
+                                    style={
+                                        **{"height": "90px"},
+                                        "background": "#e6fffa" if markup_per_unit > 0 else "#fef2f2",
+                                        "border": f"1px solid {'#38b2ac' if markup_per_unit > 0 else '#f56565'}",
+                                        "borderLeft": f"4px solid {'#38b2ac' if markup_per_unit > 0 else '#f56565'}",
+                                        "borderRadius": "6px",
+                                        "padding": "1rem",
+                                        "boxShadow": "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+                                    },
                                 ),
                                 span="auto",
                             ),
@@ -851,7 +899,7 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                 py="md",
             ),
             
-            # Chart Section
+            # Chart Section with 46Brooklyn Styling
             dmc.CardSection(
                 [
                     dcc.Graph(
@@ -864,7 +912,7 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                             'modeBarButtonsToRemove': ['pan2d', 'lasso2d', 'select2d'],
                             'toImageButtonOptions': {
                                 'format': 'png',
-                                'filename': f'timeseries_{state}_{product_value}',
+                                'filename': f'46brooklyn_timeseries_{state}_{product_value}',
                                 'height': 600,
                                 'width': 1000,
                                 'scale': 2
@@ -875,19 +923,19 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                 p=0,
             ),
             
-            # Footer Section
+            # 46Brooklyn Footer Section
             dmc.CardSection(
                 [
                     dmc.Group(
                         [
-                            dmc.Badge("NADAC", color="blue", variant="light"),
+                            dmc.Badge("NADAC Reference", color="orange", variant="light"),
                             dmc.Text("vs", size="sm", c="gray"),
-                            dmc.Badge("Payment per Unit", color="pink", variant="light"),
+                            dmc.Badge("Medicaid Payment", variant="outline", style={"borderColor": "#1a365d", "color": "#1a365d"}),
                             dmc.Divider(orientation="vertical"),
                             dmc.Text(
-                                "Interactive chart with zoom and pan controls",
+                                "46brooklyn Research • Data-driven drug pricing insights",
                                 size="xs",
-                                c="gray"
+                                className="brooklyn-brand"
                             )
                         ],
                         gap="sm",
@@ -896,14 +944,15 @@ def create_timeseries_card(state, data, date_value, total_claims, pre_rebate_spe
                 ],
                 withBorder=True,
                 inheritPadding=True,
-                py="xs",
-                style={"backgroundColor": "#f8fafc"}
+                py="sm",
+                style={"backgroundColor": "#f7fafc"}
             )
         ],
         withBorder=True,
-        shadow="md",
+        shadow="lg",
         radius="md",
-        mt="md",
+        mt="lg",
+        style={"border": "1px solid #e2e8f0"}
     )
 
 
