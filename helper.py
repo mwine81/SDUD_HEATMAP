@@ -176,7 +176,8 @@ class MantineUI:
         return dmc.Select(
             id="metric-dropdown",
             data=[
-                'markup_per_unit', 'payment_per_unit'
+                {'value':'markup_per_unit','label':'Markup per Unit'}, 
+                {'value':'payment_per_unit','label':'Payment per Unit'}
             ],
             value='markup_per_unit',  # Default to markup_per_unit
             searchable=True,

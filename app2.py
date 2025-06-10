@@ -163,12 +163,12 @@ layout = dmc.AppShell(
                                 dmc.Group(
                                     [
                                         DashIconify(icon="tabler:building-hospital", width=16, color="#1a365d"),
-                                        dmc.Text("Facility Status", size="sm", fw="bold", className="brooklyn-brand"),
+                                        dmc.Text("Program Type", size="sm", fw="bold", className="brooklyn-brand"),
                                     ],
                                     gap="xs",
                                 ),
                                 MantineUI.ffsu_dropdown(),
-                                dmc.Text("Federal vs Non-Federal facilities", size="xs", c="gray"),
+                                dmc.Text("Fee-for-Service vs Managed Care", size="xs", c="gray"),
                             ],
                             gap="xs",
                         ),

@@ -84,7 +84,7 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
                 'font': {'size': 14, 'color': BROOKLYN_TEXT, 'family': 'Source Sans Pro, Inter, sans-serif'},
                 'side': 'bottom'
             },
-            'tickfont': {'size': 12, 'color': BROOKLYN_MUTED},
+            'tickfont': {'size': 16, 'color': BROOKLYN_MUTED},
             'orientation': 'h',
             'x': 0.5,
             'y': -0.15,
@@ -149,7 +149,7 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         hoverlabel=dict(
             bgcolor="rgba(255, 255, 255, 0.95)",
             bordercolor=BROOKLYN_SECONDARY,
-            font_size=12,
+            font_size=18,
             font_family="Source Sans Pro, Inter, sans-serif",
             font_color=BROOKLYN_TEXT,
             align="left"
@@ -178,25 +178,22 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         .sort("date")
         .select([
             pl.col("date"),
-            pl.col("nadac_per_unit"),
-            pl.col("payment_per_unit")
+            pl.col("nadac_per_unit").alias("NADAC Per Unit"),
+            pl.col("payment_per_unit").alias("Payment Per Unit")
         ])
         .unpivot(
             index=["date"],
-            on=["nadac_per_unit", "payment_per_unit"],
+            on=["NADAC Per Unit", "Payment Per Unit"],
             variable_name="Metric",
             value_name="Value"
         )
-        .with_columns([
-            pl.col("Metric").str.replace("_per_unit", "").str.replace("_", " ").str.to_titlecase().alias("Metric_Label")
-        ])
         .to_pandas()
     )
-
+  
     # 46Brooklyn Research color scheme
     color_map = {
-        "nadac_per_unit": BROOKLYN_PRIMARY,      # Deep navy blue
-        "payment_per_unit": BROOKLYN_ACCENT      # Orange accent
+        "NADAC Per Unit": BROOKLYN_PRIMARY,      # Deep navy blue
+        "Payment Per Unit": BROOKLYN_ACCENT      # Orange accent
     }
     
     # Create the line plot
@@ -415,7 +412,7 @@ def empty_map_placeholder():
         xaxis=dict(visible=False),
         yaxis=dict(visible=False)
     )
-
+    
     fig.update_xaxes(showgrid=False, zeroline=False)
     fig.update_yaxes(showgrid=False, zeroline=False)
 
