@@ -3,6 +3,15 @@ import plotly.express as px
 from polars import col as c
 from dash import html
 
+# 46Brooklyn Research Brand Colors
+BROOKLYN_PRIMARY = "#1a365d"     # Deep navy blue
+BROOKLYN_SECONDARY = "#2c5282"   # Medium blue
+BROOKLYN_ACCENT = "#ed8936"      # Orange accent
+BROOKLYN_TEXT = "#1a202c"        # Dark gray text
+BROOKLYN_MUTED = "#718096"       # Light gray text
+BROOKLYN_BACKGROUND = "#f7fafc"  # Light background
+BROOKLYN_WHITE = "#ffffff"       # Pure white
+
 def create_choropleth(data: pl.LazyFrame, metric: str):
     """
     Create a professional choropleth map optimized for Mantine cards.
@@ -23,8 +32,13 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
     # Determine if the metric is a currency field
     is_currency = metric in currency_fields
     
-    # Professional color scale - better than Viridis for business presentations
-    color_scale = "RdYlBu_r" if is_currency else "Blues"
+    # 46Brooklyn Research color scale - professional navy/orange theme
+    if is_currency:
+        # Custom color scale for 46Brooklyn - navy to orange gradient
+        color_scale = [[0.0, "#f7fafc"], [0.25, "#90cdf4"], [0.5, "#2c5282"], [0.75, "#1a365d"], [1.0, "#ed8936"]]
+    else:
+        # Blue gradient for non-currency metrics
+        color_scale = [[0.0, "#f7fafc"], [0.25, "#bee3f8"], [0.5, "#63b3ed"], [0.75, "#2c5282"], [1.0, "#1a365d"]]
     
     # Create the choropleth map
     fig = px.choropleth(
@@ -37,16 +51,22 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         custom_data=['state'],
     )
     
-    # Calculate min/max for colorbar ticks
-    min_val = float(df[metric].min()) 
-    max_val = float(df[metric].max()) 
+    # Calculate min/max for colorbar ticks with null safety
+    min_val_raw = df[metric].min() 
+    max_val_raw = df[metric].max()
     nticks = 4  # Limit to 4 ticks to avoid overlap
-    if min_val == max_val:
-        tickvals = [min_val]
-    else:
-        tickvals = [round(min_val + i * (max_val - min_val) / (nticks - 1), 2) for i in range(nticks)]
     
-    # Enhanced styling for professional appearance optimized for Mantine cards
+    if min_val_raw is None or max_val_raw is None:
+        tickvals = [0]
+    else:
+        min_val = float(min_val_raw)
+        max_val = float(max_val_raw)
+        if min_val == max_val:
+            tickvals = [min_val]
+        else:
+            tickvals = [round(min_val + i * (max_val - min_val) / (nticks - 1), 2) for i in range(nticks)]
+    
+    # Enhanced styling for 46Brooklyn Research professional appearance
     fig.update_layout(
         title=None,
         showlegend=False,
@@ -54,17 +74,17 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         height=500,
         margin=dict(l=5, r=5, t=10, b=70),
         font=dict(
-            family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            family="Source Sans Pro, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             size=12,
-            color="#1e293b"
+            color=BROOKLYN_TEXT
         ),
         coloraxis_colorbar={
             'title': {
                 'text': metric.replace('_', ' ').title(),
-                'font': {'size': 14, 'color': '#212529', 'family': 'Inter, sans-serif'},
+                'font': {'size': 14, 'color': BROOKLYN_TEXT, 'family': 'Source Sans Pro, Inter, sans-serif'},
                 'side': 'bottom'
             },
-            'tickfont': {'size': 12, 'color': '#495057'},
+            'tickfont': {'size': 12, 'color': BROOKLYN_MUTED},
             'orientation': 'h',
             'x': 0.5,
             'y': -0.15,
@@ -72,8 +92,8 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
             'lenmode': 'fraction',
             'len': 0.75,
             'thickness': 18,
-            'bgcolor': 'rgba(248, 249, 250, 0.95)',
-            'bordercolor': '#dee2e6',
+            'bgcolor': 'rgba(247, 250, 252, 0.95)',
+            'bordercolor': BROOKLYN_SECONDARY,
             'borderwidth': 1,
             'tickformat': '$,.2f' if is_currency else ',.1f',
             'tickmode': 'array',
@@ -83,7 +103,7 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         geo=dict(
             showframe=False,
             showcoastlines=True,
-            coastlinecolor="#94a3b8",
+            coastlinecolor=BROOKLYN_MUTED,
             coastlinewidth=0.8,
             projection_type='albers usa',
             bgcolor='rgba(0,0,0,0)',
@@ -91,9 +111,9 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
             lakecolor='#e0f2fe',
             showrivers=False,
             showland=True,
-            landcolor='#f8fafc',
+            landcolor=BROOKLYN_BACKGROUND,
             showsubunits=True,
-            subunitcolor="#222323",
+            subunitcolor=BROOKLYN_SECONDARY,
         ),
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
@@ -102,9 +122,9 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
     
     fig.update_traces(
         hovertemplate='<b>%{location}</b><br>' +
-                     f'<span style="color: #374151;">{metric.replace("_", " ").title()}:</span> ' +
-                     ('<span style="color: #059669; font-weight: 600;">$%{z:,.2f}</span>' if is_currency else 
-                      '<span style="color: #059669; font-weight: 600;">%{z:,.2f}</span>') +
+                     f'<span style="color: {BROOKLYN_MUTED};">{metric.replace("_", " ").title()}:</span> ' +
+                     (f'<span style="color: {BROOKLYN_ACCENT}; font-weight: 600;">$%{{z:,.2f}}</span>' if is_currency else 
+                      f'<span style="color: {BROOKLYN_ACCENT}; font-weight: 600;">%{{z:,.2f}}</span>') +
                      '<extra></extra>',
         marker_line_color='white',
         marker_line_width=1.5,
@@ -117,9 +137,9 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         x=0.5, y=0.98,
         xanchor="center", yanchor="top",
         showarrow=False,
-        font=dict(size=16, color="#1f2937", family="Inter, sans-serif"),
+        font=dict(size=16, color=BROOKLYN_PRIMARY, family="Source Sans Pro, Inter, sans-serif"),
         bgcolor="rgba(255, 255, 255, 0.9)",
-        bordercolor="#e5e7eb",
+        bordercolor=BROOKLYN_SECONDARY,
         borderwidth=1,
         borderpad=8
     )
@@ -128,10 +148,10 @@ def create_choropleth(data: pl.LazyFrame, metric: str):
         hovermode='closest',
         hoverlabel=dict(
             bgcolor="rgba(255, 255, 255, 0.95)",
-            bordercolor="#e5e7eb",
+            bordercolor=BROOKLYN_SECONDARY,
             font_size=12,
-            font_family="Inter, sans-serif",
-            font_color="#374151",
+            font_family="Source Sans Pro, Inter, sans-serif",
+            font_color=BROOKLYN_TEXT,
             align="left"
         )
     )
@@ -173,10 +193,10 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         .to_pandas()
     )
 
-    # Enhanced color scheme with better contrast
+    # 46Brooklyn Research color scheme
     color_map = {
-        "nadac_per_unit": "#2E86AB",      # Professional blue
-        "payment_per_unit": "#A23B72"     # Complementary magenta
+        "nadac_per_unit": BROOKLYN_PRIMARY,      # Deep navy blue
+        "payment_per_unit": BROOKLYN_ACCENT      # Orange accent
     }
     
     # Create the line plot
@@ -204,33 +224,33 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         connectgaps=True
     )
 
-    # Professional layout with enhanced styling
+    # 46Brooklyn Research professional layout
     fig.update_layout(
         title={
             "text": f"<b>Drug Pricing Comparison: NADAC vs Payment per Unit</b><br><sup>State: {state}</sup>",
             "x": 0.5,
             "xanchor": "center",
-            "font": {"size": 24, "family": "Inter, Arial, sans-serif", "color": "#2c3e50"}
+            "font": {"size": 24, "family": "Source Sans Pro, Inter, Arial, sans-serif", "color": BROOKLYN_PRIMARY}
         },
         xaxis=dict(
             title=dict(
                 text="<b>Date</b>",
-                font=dict(size=16, color="#34495e")
+                font=dict(size=16, color=BROOKLYN_PRIMARY)
             ),
             tickformat="%b %Y",
             showgrid=True,
-            gridcolor="#ecf0f1",
+            gridcolor=BROOKLYN_BACKGROUND,
             gridwidth=1,
-            tickfont=dict(size=13, color="#7f8c8d"),
+            tickfont=dict(size=13, color=BROOKLYN_MUTED),
             showline=True,
             linewidth=2,
-            linecolor="#bdc3c7",
+            linecolor=BROOKLYN_SECONDARY,
             mirror=True,
             rangeslider=dict(
                 visible=True,
                 thickness=0.08,
-                bgcolor="#f8f9fa",
-                bordercolor="#dee2e6",
+                bgcolor=BROOKLYN_BACKGROUND,
+                bordercolor=BROOKLYN_SECONDARY,
                 borderwidth=2
             ),
             rangeselector=dict(
@@ -240,11 +260,11 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
                     dict(count=2, label="2Y", step="year", stepmode="backward"),
                     dict(step="all", label="All")
                 ],
-                bgcolor="#f8f9fa",
-                activecolor="#3498db",
-                bordercolor="#dee2e6",
+                bgcolor=BROOKLYN_BACKGROUND,
+                activecolor=BROOKLYN_ACCENT,
+                bordercolor=BROOKLYN_SECONDARY,
                 borderwidth=1,
-                font=dict(size=12, color="#495057"),
+                font=dict(size=12, color=BROOKLYN_TEXT),
                 x=0.01,
                 y=1.02
             )
@@ -252,20 +272,20 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
         yaxis=dict(
             title=dict(
                 text="<b>Price per Unit ($)</b>",
-                font=dict(size=16, color="#34495e")
+                font=dict(size=16, color=BROOKLYN_PRIMARY)
             ),
             tickprefix="$",
             tickformat=",.2f",
             showgrid=True,
-            gridcolor="#ecf0f1",
+            gridcolor=BROOKLYN_BACKGROUND,
             gridwidth=1,
-            tickfont=dict(size=13, color="#7f8c8d"),
+            tickfont=dict(size=13, color=BROOKLYN_MUTED),
             showline=True,
             linewidth=2,
-            linecolor="#bdc3c7",
+            linecolor=BROOKLYN_SECONDARY,
             mirror=True,
             zeroline=True,
-            zerolinecolor="#e74c3c",
+            zerolinecolor=BROOKLYN_ACCENT,
             zerolinewidth=2
         ),
         legend=dict(
@@ -274,45 +294,45 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
             y=-0.40,
             xanchor="center",
             x=0.5,
-            font=dict(size=14, color="#2c3e50"),
+            font=dict(size=14, color=BROOKLYN_PRIMARY),
             bgcolor="rgba(255, 255, 255, 0.9)",
-            bordercolor="#bdc3c7",
+            bordercolor=BROOKLYN_SECONDARY,
             borderwidth=1,
             itemsizing="constant"
         ),
-        font=dict(family="Inter, Arial, sans-serif"),
-        plot_bgcolor="#ffffff",
-        paper_bgcolor="#fafbfc",
+        font=dict(family="Source Sans Pro, Inter, Arial, sans-serif"),
+        plot_bgcolor=BROOKLYN_WHITE,
+        paper_bgcolor=BROOKLYN_BACKGROUND,
         # width=1000,
         height=600,
         margin=dict(l=80, r=40, t=120, b=120),
         hovermode="x unified",
         hoverlabel=dict(
             bgcolor="rgba(255, 255, 255, 0.95)",
-            bordercolor="#bdc3c7",
+            bordercolor=BROOKLYN_SECONDARY,
             font_size=13,
-            font_family="Inter, Arial, sans-serif"
+            font_family="Source Sans Pro, Inter, Arial, sans-serif"
         ),
-        # Add subtle shadow effect
+        # 46Brooklyn Research annotation
         annotations=[
             dict(
-                text="Data shows pricing trends over time",
+                text="Data shows pricing trends over time | 46brooklyn Research",
                 xref="paper", yref="paper",
                 x=1, y=0,
                 xanchor="right", yanchor="bottom",
                 showarrow=False,
-                font=dict(size=11, color="#95a5a6"),
+                font=dict(size=11, color=BROOKLYN_MUTED),
                 bgcolor="rgba(255, 255, 255, 0.8)",
-                bordercolor="#ecf0f1",
+                bordercolor=BROOKLYN_BACKGROUND,
                 borderwidth=1
             )
         ]
     )
 
-    # Add professional styling touches
+    # Professional styling touches with 46Brooklyn colors
     fig.update_xaxes(
         showspikes=True,
-        spikecolor="#95a5a6",
+        spikecolor=BROOKLYN_MUTED,
         spikesnap="cursor",
         spikemode="across",
         spikethickness=1
@@ -320,7 +340,7 @@ def plot_state_timeseries(state_df: pl.LazyFrame, state: str = "State"):
     
     fig.update_yaxes(
         showspikes=True,
-        spikecolor="#95a5a6",
+        spikecolor=BROOKLYN_MUTED,
         spikesnap="cursor",
         spikemode="across",
         spikethickness=1
@@ -337,25 +357,25 @@ def state_place_holder():
                             className="fas fa-chart-line",
                             style={
                                 "fontSize": "3rem",
-                                "color": "#64748b",
+                                "color": BROOKLYN_MUTED,
                                 "marginBottom": "1rem",
                             },
                         ),
                         html.H4(
                             "Select a State to View Time Series",
-                            style={"color": "#64748b", "marginBottom": "0.5rem"},
+                            style={"color": BROOKLYN_PRIMARY, "marginBottom": "0.5rem"},
                         ),
                         html.P(
                             "Click on any state in the map above to see pricing trends over time",
-                            style={"color": "#94a3b8", "fontSize": "1.1rem"},
+                            style={"color": BROOKLYN_MUTED, "fontSize": "1.1rem"},
                         ),
                     ],
                     style={
                         "textAlign": "center",
                         "padding": "3rem 2rem",
-                        "backgroundColor": "#ffffff",
+                        "backgroundColor": BROOKLYN_WHITE,
                         "borderRadius": "8px",
-                        "border": "2px dashed #e2e8f0",
+                        "border": f"2px dashed {BROOKLYN_SECONDARY}",
                         "margin": "2rem 0",
                     },
                 )
@@ -368,14 +388,14 @@ def empty_map_placeholder():
 
     fig = go.Figure()
     fig.add_annotation(
-        text="<b>No Data Available</b><br><span style='font-size:1.1em;color:#64748b;'>No data found for the selected filters.<br>Please adjust your selections and try again.</span>",
+        text=f"<b>No Data Available</b><br><span style='font-size:1.1em;color:{BROOKLYN_MUTED};'>No data found for the selected filters.<br>Please adjust your selections and try again.</span>",
         xref="paper", yref="paper",
         x=0.5, y=0.5,
         xanchor="center", yanchor="middle",
         showarrow=False,
-        font=dict(size=20, color="#64748b", family="Inter, Arial, sans-serif"),
+        font=dict(size=20, color=BROOKLYN_PRIMARY, family="Source Sans Pro, Inter, Arial, sans-serif"),
         bgcolor="rgba(255,255,255,0.95)",
-        bordercolor="#e2e8f0",
+        bordercolor=BROOKLYN_SECONDARY,
         borderwidth=2,
         borderpad=12
     )
@@ -384,13 +404,13 @@ def empty_map_placeholder():
         geo=dict(
             scope="usa",
             showland=True,
-            landcolor="#f8fafc",
+            landcolor=BROOKLYN_BACKGROUND,
             showframe=False,
             showcoastlines=False,
             bgcolor="rgba(0,0,0,0)"
         ),
-        plot_bgcolor="#ffffff",
-        paper_bgcolor="#fafbfc",
+        plot_bgcolor=BROOKLYN_WHITE,
+        paper_bgcolor=BROOKLYN_BACKGROUND,
         margin=dict(l=0, r=0, t=0, b=0),
         xaxis=dict(visible=False),
         yaxis=dict(visible=False)
